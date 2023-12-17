@@ -5,9 +5,9 @@ title [0 percent] Melody Script 14 & pushd "%CD%" & CD /D "%~dp0" >nul
 
 :--------------------------------------
 :: disabling devices HPET + Virtualization HyperV for get better performance + latency
-:: if you use Hyper-V , enable it in Device Manager
-wmic path Win32_PnPEntity where "name='High precision event timer'" call disable
-wmic path Win32_PnPEntity where "name='Microsoft Hyper-V Virtualization Infrastructure Driver'" call disable
+for %%i in ("High precision event timer", "Microsoft Hyper-V Virtualization Infrastructure Driver") do (
+    wmic path Win32_PnPEntity where "name='%%i'" call disable
+)
 :: Disable P-State for GPUs
 for /f %%i in ('wmic path Win32_VideoController get PNPDeviceID^| findstr /L "PCI\VEN_"') do (
 	for /f "tokens=3" %%a in ('reg query "HKLM\SYSTEM\ControlSet001\Enum\%%i" /v "Driver"') do (
